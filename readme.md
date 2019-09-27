@@ -16,3 +16,6 @@ raccogli le modifiche
 scrivi cosa hai fatto al posto dei puntini
 ## git push -u origin ..
 al posto dei punti il nome del ramo dove carichi la roba
+
+
+# linter python pep8
