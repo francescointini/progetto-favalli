@@ -1,0 +1,37 @@
+#main
+#interfaccia dei diversi componenti
+#integrare ghdl
+#ingresso 2 file vhd
+
+#import
+from pathlib import Path
+import sys
+
+#controllo parametri  3 parametri: 2 file e un numero
+def controllo(file1,file2,intero):
+    if (len(sys.argv)!= 5):
+        print("Errore, numero parametri errati")
+        exit("Errore 00")
+
+    myfile=Path(file1)
+    if not(myfile.is_file()):
+        print("File1 nel primo parametro non esistente.")
+        exit("Errore 01")
+    
+    myfile2=Path(file2)
+    if not(myfile2.is_file()):
+        print("File2 nel secondo parametro non esistente.")
+        exit("Errore 02")
+
+    if(intero == ""):
+        print("Errore, terzo parametro mancante")
+        exit("Errore 03")
+    
+    value = int(intero)
+    if not(intero > 0):
+        print("Errore valore non consentito.")
+        exit("Errore 04")
+
+
+
+    
