@@ -23,6 +23,7 @@ class Entity:
         self.input_port2 = '',
         self.output_port1 = '',
         self.output_port2 = '',
+        self.component = []
     
     def __str__(self):
         return "%s, in: %s %s, out: %s %s" % \
@@ -37,7 +38,6 @@ class Entity:
 class Architcture:
     def __init__(self):
         self.name = '',
-        self.behav = []
     
     def __str__(self):
         return "%s" % self.name
@@ -55,8 +55,8 @@ def clean_list(list):
 file_vhdl = 'test.vhdl'
 
 # variabili di flag
-behav = False
-# inizio del behav del componente
+component = False
+# inizio del componente
 
 # istanze
 library = Library()
@@ -83,11 +83,14 @@ with open(file_vhdl, 'r') as file:
             # fine lettura librerie
             # lettura entity
             if 'entity' in c_line:
+                component = True
                 # ricavo il nome della entity
                 n_line = c_line.split(' ')
                 # print(n_line)
                 entity.name = n_line[1]
                 continue
+            if component:
+                entity.component.append(c_line)
             if 'std_logic' in c_line:
                 # ricavo il nome delle porte
                 n_line = c_line.replace(',', '')
@@ -105,22 +108,18 @@ with open(file_vhdl, 'r') as file:
                     entity.output_port1 = temp_line[0]
                     entity.output_port2 = temp_line[1]
                     continue
+            if 'end' in c_line and entity.name in c_line:
+                component = False
             if 'architecture' in c_line:
                 # architecture name
                 n_line = c_line.split(' ')
                 architecture.name = n_line[1]
-                behav = True
                 continue
-            if behav:
-                # print(c_line)
-                architecture.behav.append(c_line)
-            if 'end' in c_line:
-                behav = False
         # print(len(c_line))
         # print(line)
         
 
     print(library)
     print(entity)
+    print(entity.component)
     print(architecture)
-    print(architecture.behav)
