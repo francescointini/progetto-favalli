@@ -23,7 +23,6 @@ class Entity:
         self.input_port2 = '',
         self.output_port1 = '',
         self.output_port2 = '',
-        self.component = []
     
     def __str__(self):
         return "%s, in: %s %s, out: %s %s" % \
@@ -35,12 +34,22 @@ class Entity:
                 self.output_port2
             )
 
+
 class Architcture:
     def __init__(self):
         self.name = '',
     
     def __str__(self):
         return "%s" % self.name
+
+
+class SignalMask:
+    def __init__(self, entity):
+        self.input_port1 = entity.input_port1.upper() + '_SGN'
+        self.input_port2 = entity.input_port2.upper() + '_SGN'
+        self.output_port1 = entity.output_port1.upper() + '_SGN'
+        self.output_port2 = entity.output_port2.upper() + '_SGN'
+
 
 # funzioni
 def clean_list(list):
@@ -50,6 +59,7 @@ def clean_list(list):
         if element != '':
             res.append(element)
     return res
+
 
 # var di sistema
 file_vhdl = 'test.vhdl'
@@ -83,14 +93,11 @@ with open(file_vhdl, 'r') as file:
             # fine lettura librerie
             # lettura entity
             if 'entity' in c_line:
-                component = True
                 # ricavo il nome della entity
                 n_line = c_line.split(' ')
                 # print(n_line)
-                entity.name = n_line[1]
+                entity.name = n_line[1].upper()
                 continue
-            if component:
-                entity.component.append(c_line)
             if 'std_logic' in c_line:
                 # ricavo il nome delle porte
                 n_line = c_line.replace(',', '')
@@ -99,27 +106,49 @@ with open(file_vhdl, 'r') as file:
                 if 'in' in n_line:
                     temp_line = clean_list(n_line)
                     # print(temp_line)
-                    entity.input_port1 = temp_line[0]
-                    entity.input_port2 = temp_line[1]
+                    entity.input_port1 = temp_line[0].upper()
+                    entity.input_port2 = temp_line[1].upper()
                     continue
                 if 'out' in n_line:
                     temp_line = clean_list(n_line)
                     # print(temp_line)
-                    entity.output_port1 = temp_line[0]
-                    entity.output_port2 = temp_line[1]
+                    entity.output_port1 = temp_line[0].upper()
+                    entity.output_port2 = temp_line[1].upper()
                     continue
-            if 'end' in c_line and entity.name in c_line:
-                component = False
             if 'architecture' in c_line:
                 # architecture name
                 n_line = c_line.split(' ')
-                architecture.name = n_line[1]
+                architecture.name = n_line[1].upper()
                 continue
         # print(len(c_line))
         # print(line)
-        
+print(library)
+print(entity)
+print(architecture)
 
-    print(library)
-    print(entity)
-    print(entity.component)
-    print(architecture)
+# test bench funzionale
+file_tb_vhdl = file_vhdl.replace('.', '_tb.')
+mask = SignalMask(entity)
+
+with open(file_tb_vhdl, 'w') as file:
+    # creazione del file testbench_TB.VHDL e scrittura della testbench
+    file.write(library.first_line + ';\n')
+    file.write(library.second_line + ';\n\n')
+    file.write('entity ' + entity.name + '_TB is\n')
+    file.write('end ' + entity.name + '_TB;\n\n')
+    file.write('architecture ' + architecture.name + '_TB of ' + entity.name.upper() + '_TB is\n')
+    file.write('\tsignal ' + mask.input_port1 + ' : std_logic;\n')
+    file.write('\tsignal ' + mask.input_port2 + ' : std_logic;\n')
+    file.write('\tsignal ' + mask.output_port1 + ' : std_logic;\n')
+    file.write('\tsignal ' + mask.output_port2 + ' : std_logic;\n\n')
+    file.write("\tcomponent " + entity.name + " is\n")
+    file.write("\tport (\n")
+    file.write("\t\t" + entity.input_port1 + ", " + entity.input_port2 + " : in std_logic,\n")
+    file.write("\t\t" + entity.output_port1 + ', ' + entity.output_port2 + ' : out std_logic);\n')
+    file.write("\tend component;\n")
+    file.write("begin\n")
+    file.write("\t" + architecture.name + ' : ' + entity.name + " port map ( " + mask.input_port1 + ', ' + mask.input_port2 + ', ' + mask.output_port1 + ', ' + mask.output_port2  + " )\n")
+    file.write("\n\t" + architecture.name + '_TB : process\n')
+    file.write("\t\tQUI VANNO I PROCESSI\n")
+    file.write("\tend process;\n")
+    file.write("end " + architecture.name + "_TB;\n")
