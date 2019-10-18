@@ -1,5 +1,6 @@
 import os
 
+
 class Library:
     # struttura dati atta a contenere le librerie di un file vhdl
     # per convenzione queste vanno esclusivamente sulle prime due
@@ -7,7 +8,7 @@ class Library:
     def __init__(self):
         self.first_line = '',
         self.second_line = '',
-    
+
     def __str__(self):
         return "%s %s" % (self.first_line, self.second_line)
 
@@ -23,7 +24,7 @@ class Entity:
         self.input_port2 = '',
         self.output_port1 = '',
         self.output_port2 = '',
-    
+
     def __str__(self):
         return "%s, in: %s %s, out: %s %s" % \
             (
@@ -38,7 +39,7 @@ class Entity:
 class Architcture:
     def __init__(self):
         self.name = '',
-    
+
     def __str__(self):
         return "%s" % self.name
 
@@ -78,7 +79,7 @@ with open(file_vhdl, 'r') as file:
     lines = file.read().splitlines()
     for line in lines:
         # line ripulita dai ; e trasformata
-        # tutta in minuscolo serve facilitare il 
+        # tutta in minuscolo serve facilitare il
         # riconoscimento dei pattern testuali
         c_line = line.replace(';', '').lower()
         # print(c_line)
@@ -136,18 +137,22 @@ with open(file_tb_vhdl, 'w') as file:
     file.write(library.second_line + ';\n\n')
     file.write('entity ' + entity.name + '_TB is\n')
     file.write('end ' + entity.name + '_TB;\n\n')
-    file.write('architecture ' + architecture.name + '_TB of ' + entity.name.upper() + '_TB is\n')
+    file.write('architecture ' + architecture.name +
+               '_TB of ' + entity.name.upper() + '_TB is\n')
     file.write('\tsignal ' + mask.input_port1 + ' : std_logic;\n')
     file.write('\tsignal ' + mask.input_port2 + ' : std_logic;\n')
     file.write('\tsignal ' + mask.output_port1 + ' : std_logic;\n')
     file.write('\tsignal ' + mask.output_port2 + ' : std_logic;\n\n')
     file.write("\tcomponent " + entity.name + " is\n")
     file.write("\tport (\n")
-    file.write("\t\t" + entity.input_port1 + ", " + entity.input_port2 + " : in std_logic,\n")
-    file.write("\t\t" + entity.output_port1 + ', ' + entity.output_port2 + ' : out std_logic);\n')
+    file.write("\t\t" + entity.input_port1 + ", " +
+               entity.input_port2 + " : in std_logic,\n")
+    file.write("\t\t" + entity.output_port1 + ', ' +
+               entity.output_port2 + ' : out std_logic);\n')
     file.write("\tend component;\n")
     file.write("begin\n")
-    file.write("\t" + architecture.name + ' : ' + entity.name + " port map ( " + mask.input_port1 + ', ' + mask.input_port2 + ', ' + mask.output_port1 + ', ' + mask.output_port2  + " )\n")
+    file.write("\t" + architecture.name + ' : ' + entity.name + " port map ( " + mask.input_port1 +
+               ', ' + mask.input_port2 + ', ' + mask.output_port1 + ', ' + mask.output_port2 + " )\n")
     file.write("\n\t" + architecture.name + '_TB : process\n')
     file.write("\t\tQUI VANNO I PROCESSI\n")
     file.write("\tend process;\n")
