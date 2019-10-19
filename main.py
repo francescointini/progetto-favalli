@@ -156,7 +156,7 @@ with open(file_tb_vhdl, 'w') as file:
                ', ' + mask.input_port2 + ', ' + mask.output_port1 + ', ' + mask.output_port2 + " )\n")
     file.write("\n\t" + architecture.name + '_TB : process\n')
     file.write("\t\tQUI VANNO I PROCESSI\n")
-    process = processi_testbench(mask.input_port1, mask.input_port2, nanosec)
+    process = processi_testbench(mask.input_port1, mask.input_port2, str(nanosec))
     for line in process:
         file.write(line)
     file.write("\tend process;\n")
