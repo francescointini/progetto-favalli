@@ -20,5 +20,3 @@ begin
 
 	HA_TB : process
 		QUI VANNO I PROCESSI
-	end process;
-end HA_TB;

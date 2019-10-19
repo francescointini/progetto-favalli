@@ -1,5 +1,5 @@
 import os
-
+from stringhe import processi_testbench
 
 class Library:
     # struttura dati atta a contenere le librerie di un file vhdl
@@ -64,6 +64,7 @@ def clean_list(list):
 
 # var di sistema
 file_vhdl = 'test.vhdl'
+nanosec = 5
 
 # variabili di flag
 component = False
@@ -155,5 +156,8 @@ with open(file_tb_vhdl, 'w') as file:
                ', ' + mask.input_port2 + ', ' + mask.output_port1 + ', ' + mask.output_port2 + " )\n")
     file.write("\n\t" + architecture.name + '_TB : process\n')
     file.write("\t\tQUI VANNO I PROCESSI\n")
+    process = processi_testbench(mask.input_port1, mask.input_port2, nanosec)
+    for line in process:
+        file.write(line)
     file.write("\tend process;\n")
     file.write("end " + architecture.name + "_TB;\n")
