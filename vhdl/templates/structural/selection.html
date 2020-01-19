@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% load port_clean %}
+
+{% block title %}creazione strutturale - selezione{% endblock %}
+
+{% block content %}
+<h1>Creazione componente</h1>
+<hr>
+<h3>Seleziona i componenti da istanziare</h3>
+<form method='POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Nome progetto</label>
+    <br>
+    {{ form.name }}
+    <br>
+    <label>Componenti da istanziare</label>
+    <br>
+    {{ form.component_list }}
+    <br>
+    {% if components %}
+    <br>
+    <p>Conferma la selezione di componenti per poter procedere</p>
+    {{ form.conferma }}
+    <br>
+    {% endif %}
+    <button type='Submit' style='margin-top: 2em;'>
+        Seleziona
+    </button>
+</form>
+<br>
+
+<hr>
+{% if components %}
+<h3> Componenti selezionati </h3>
+
+{% for component in components %}
+<div class='component container'>
+    <label>Nome:</label>
+    <h4>
+        {{ component.name }}
+    </h4>
+    <p>Entità</p>
+    <p> {{ component.entity_name }} </p>
+    <p>Architettura</p>
+    <p> {{ component.architecture_name }}</p>
+    <p>Porte di input</p>
+    <p> {{ component.input_ports|port_clean|safe }} </p>
+    <p>Porte di output</p>
+    <p> {{ component.output_ports|port_clean|safe }} </p>
+</div>
+<hr>
+{% endfor %}
+
+{% endif %}
+{% endblock %}

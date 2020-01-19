@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}lista componenti{% endblock %}
+
+{% block content %}
+
+{% for el in qs %}
+<div class="component">
+    <p>id: {{ el.pk }}</p>
+    <h4>Name: {{ el.name }}</h4>
+    <p>file: {{ el.file }}</p>
+</div>
+<hr>
+{% endfor %}
+
+{% endblock %}

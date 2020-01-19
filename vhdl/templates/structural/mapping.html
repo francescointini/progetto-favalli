@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}creazione strutturale - mapping{% endblock %}
+
+{% load port_clean %}
+
+{% block content %}
+<div class="Structural_prototype container">
+    <h2>Strutturale</h2>
+    <h3>Nome: {{ structural.name }}</h3>
+    <p>Componenti selezionati per ID: {{ structural.component_list }}</p>
+    {% if structural.mappings %}
+    <p>{{ structural.mappings|port_clean|safe }}</p>
+    {% endif %}
+</div>
+
+{% if mapping_forms %}
+<div class='mapping container'>
+    <h2>Mappatura porte dei componenti</h2>
+    <form method='POST' enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for m in mapping_forms %}
+            <h4>Porta: {{ m.port }}</h4>
+            {{ m.form }}
+            <br>
+        {% endfor %}
+        <button type='Submit' style='margin-top: 2em;'>
+            Salva
+        </button>
+    </form>
+</div>
+{% endif %}
+
+{% if post %}
+<h2>POST</h2>
+<p> {{ post }} </p>
+{% endif %}
+
+{% endblock %}

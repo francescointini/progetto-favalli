@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}homepage{% endblock %}
+
+{% block content %}
+<h1> Homepage </h1>
+<hr>
+<div class="component container">
+    <h3>
+        Componenti
+    </h3>
+    <a href="{% url 'component_creation' %}">Creazione componente</a>
+    <br>
+    <a href="{% url 'component_list' %}">Lista componenti creati</a>
+    <br>
+</div>
+<div class="structural container">
+    <h3>
+        Structural
+    </h3>
+    <a href="{% url 'structural_selection' %}">Creazione strutturale</a>
+</div>
+{% endblock %}

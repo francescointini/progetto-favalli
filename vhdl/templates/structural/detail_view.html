@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load port_clean %}
+
+{% block title %}strutturale - {{ structural.name }}{% endblock %}
+
+{% block content %}
+<h2>Strutturale - {{ structural.name }}</h2>
+<h4>Entità: {{ structural.entity_name }}, Architettura: {{ structural.architecture_name }}</h4>
+<h4>Component ids</h4>
+<p> {{ structural.component_list }}</p>
+<h4>Mappature </h4>
+<p> {{ structural.mappings | port_clean | safe }} </p>
+
+{% if out %}
+<h2>Output (file)</h2>
+<p>{{ out.library|safe }}</p>
+<p>{{ out.entity_r1|safe }}</p>
+<p>&#8195; {{ out.port_r1|safe }}</p>
+<p style='padding-left: 3em;'> {{ out.port_body|safe }}</p>
+<p>&#8195; {{ out.port_rl|safe }}</p>
+<p>{{ out.entity_rl|safe }}</p>
+<p>{{ out.arch_r1|safe }}</p>
+<p>&#8195; {{ out.sig_declaration|safe }}</p>
+<p style='padding-left: 3em;'> {{ out.signal_text|safe }}</p>
+<br>
+<div style='padding-left: 3em;'>
+    {% for c in out.component_list %}
+        <p> {{ c.name_c|safe }}</p>
+        <p> {{ out.port_r1|safe }}</p>
+        <p style='padding-left: 3em;'> {{ c.ports|safe }}</p>
+        <p>{{ out.component_rl|safe }}</p>
+        <br>
+    {% endfor %}
+</div>
+<br>
+<P>{{ out.begin|safe }}</P>
+<div style='padding-left: 3em;'>
+    {% for c in out.component_list %}
+    <p> {{ c.map_str|safe }} </p>
+    <p> &#8195; {{ out.map_statement|safe }}</p>
+    <p style='padding-left: 3em;'>{{ c.mapping_text|safe }}</p>
+    <p>&#8195; {{ out.port_rl|safe }}</p>
+    {% endfor %}
+</div>
+<p>{{ out.arch_rl | safe }}</p>
+{% endif %}
+{% endblock %}

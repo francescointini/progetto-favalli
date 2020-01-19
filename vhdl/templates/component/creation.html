@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}creazione componente{% endblock %}
+
+{% block content %}
+<h1>Creazione componente</h1>
+<hr>
+<form method='POST' enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Nome del componente</label>
+    <br>
+    {{ form.name }}
+    <br>
+    <label>File <strong>VHDL</strong> del componente</label>
+    <br>
+    {{ form.file }}
+    <br>
+    <button type='Submit' style='margin-top: 2em;'>
+        Crea
+    </button>
+</form>
+<hr>
+{% endblock %}

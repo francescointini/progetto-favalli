@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load port_clean %}
+
+{% block title %}Creazione strutturale - finalizzazione{% endblock %}
+
+{% block content %}
+<h2>Nome: {{ structural.name }} </h2>
+<p>Mappings:<br>
+    {{ structural.mappings|port_clean|safe }}
+</p>
+
+{% if form %}
+<form method='POST' enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>
+        Nome entità
+    </label>
+    {{ form.entity_name }}
+    <br>
+    <label>
+        Nome architettura
+    </label>
+    {{ form.architecture_name }}
+    <br>
+    <button type='Submit' style='margin-top: 2em;'>
+        Salva
+    </button>
+</form>
+{% endif %}
+
+{% if post %}
+<h2>POST</h2>
+<p>
+    {{ post }}
+</p>
+{% endif %}
+{% endblock %}
