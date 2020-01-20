@@ -45,4 +45,4 @@ pipenv install django
 ```shell
 python manage.py runserver
 ```
-**la web app è raggiungibile all'indirizzo 'https://localhost:8000'**
+**la web app è raggiungibile all'indirizzo 'http://localhost:8000'**
