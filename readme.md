@@ -204,4 +204,42 @@ Terminata questa fase l'utente ha generato un componente che potrà usare nei va
 
 ### Fase 2: creazione Strutturale
 L'utente andando alla vista: **'BASEURL/structural/selection'** viene rimandato alla fase di creazione di un VHDL strutturale.
-Qui l'utente è chiamato a dare un nome al progetto e a selezionare i componenti da istanziare nel VHDL
+Qui l'utente è chiamato a dare un nome al progetto e a selezionare i componenti da istanziare nel VHDL.
+
+** Struttura del form**
+
+```python 
+class StructuralSelectionForm(forms.ModelForm):
+    component_list = forms.ModelChoiceField(
+        queryset=Component.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+    conferma = forms.ChoiceField(
+        required=False,
+        choices=[(False, 'No'), (True, 'Si')],
+    )
+
+    class Meta:
+        model = Structural
+        fields = (
+            'name',
+            'component_list',
+        )
+```
+**component_list** = rappresenta il campo del form dove vengono selezionati i componenti vhdl. Da notare come le scelte che propone agli utenti vengano generate da un queryset su un DB locale.
+
+Tutti i dati generati dall'interazione dell'utente con questa vista vengono passati alla vista successiva con il metodo **POST** dopo esser stati validati dalla vista stessa.
+
+### Fase 3: mappatura dei componenti
+
+L'utente andando alla vista: **'BASEURL/structural/< pk >'**, dove pk rappresenta l' ID dello strutturale (primary key), l'utente viene portato su una vista dove potrà eseguire le mappature di tutti i componenti istanziati.
+
+Qui per ogni porta istanziata vi è un "menu a tendina" che permette di scegliere su quale porta mappare.
+Ovviamente nelle scelte del "menu a tendina" sono presenti tutte le porte dei componenti istanziati.
+
+In questo passaggio si identificano una serie di criticità:
+- se vi è una mappatura fra la porta del componente A e la porta del componente B, va generato il segnale S1 di 'raccordo' fra le due.
+- un componente deve poter essere mappato con una porta del componente che lo contiene.
+
+La prima problematica viene risolta in fase di elaborazione dei dati del form, mentre la seconda viene risolta facendo la injection di una nuova porta sul queryset di **StructuralMappingForm** (file: vhdl/forms.py). Questa nuova porta avrà come nome PORTA_ENTITA e come tipo quello della porta con cui viene mappata.
+
