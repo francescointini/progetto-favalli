@@ -232,7 +232,7 @@ Tutti i dati generati dall'interazione dell'utente con questa vista vengono pass
 
 ### Fase 3: mappatura dei componenti
 
-L'utente andando alla vista: **'BASEURL/structural/< pk >'**, dove pk rappresenta l' ID dello strutturale (primary key), l'utente viene portato su una vista dove potrà eseguire le mappature di tutti i componenti istanziati.
+L'utente andando alla vista: **'BASEURL/structural/mapping/< pk >'**, dove pk rappresenta l' ID dello strutturale (primary key), l'utente viene portato su una vista dove potrà eseguire le mappature di tutti i componenti istanziati.
 
 Qui per ogni porta istanziata vi è un "menu a tendina" che permette di scegliere su quale porta mappare.
 Ovviamente nelle scelte del "menu a tendina" sono presenti tutte le porte dei componenti istanziati.
@@ -242,4 +242,10 @@ In questo passaggio si identificano una serie di criticità:
 - un componente deve poter essere mappato con una porta del componente che lo contiene.
 
 La prima problematica viene risolta in fase di elaborazione dei dati del form, mentre la seconda viene risolta facendo la injection di una nuova porta sul queryset di **StructuralMappingForm** (file: vhdl/forms.py). Questa nuova porta avrà come nome PORTA_ENTITA e come tipo quello della porta con cui viene mappata.
+Ovviamente la nuova porta generata viene inserita nella entity dello strutturale.
 
+### Fase 4: finalizzazione
+
+L'utente andando alla vista: **'BASEURL/structural/finalize/< pk >'** dove può inserire il nome dell'entità del file vhdl generato e il nome dell'architettura. 
+
+Subito dopo aver inserito questi dati l'utente viene portato alla pagina **/structural/detail_view/< pk >** che riporta il contenuto testuale del **VHDL strutturale **
