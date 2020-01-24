@@ -160,6 +160,7 @@ def component_init(component_list, mapping_signals):
         # print('PORTE')
         # print(m)
         for e in m:
+            test_print()
             text = e[1] + ' => ' + e[2] + ',<br>'
             mapping_text += text
         
@@ -247,6 +248,10 @@ def output_generation(structural):
 
     arch_rl = f'end {structural.architecture_name};<br>'
     res['arch_rl'] = arch_rl
+    
 
     return res
+
+def test_print():
+    print('i miei capezzolini piccini picciò sono andati in Francia')
     
